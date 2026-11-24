@@ -1,25 +1,77 @@
+* { box-sizing: border-box; }
+
 body {
-    font-family: Arial;
-    background: #eaf2f8;
-    text-align: center;
+  margin: 0;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1f2937;
+  background: radial-gradient(circle at top, #dbeafe, #f3f6fb 60%);
 }
 
-.box {
-    background: white;
-    width: 320px;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 10px;
+button, input { font: inherit; }
+
+.card {
+  width: min(100%, 420px);
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
 }
 
-input, button {
-    padding: 10px;
-    margin: 5px;
+h1 { margin: 0 0 20px; font-size: 26px; text-align: center; }
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 14px;
+  background: #eef4ff;
 }
+
+.total span { color: #64748b; }
+.total strong { font-size: 26px; color: #2563eb; }
+
+form { display: grid; gap: 10px; margin-top: 18px; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px #dbeafe; }
 
 button {
-    background: #2563eb;
-    color: white;
-    border: none;
-    cursor: pointer;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
+
+button:hover { background: #1d4ed8; }
+
+.list { margin-top: 24px; }
+.list h2 { display: flex; gap: 8px; align-items: center; margin: 0 0 12px; font-size: 16px; }
+.list h2 span { padding: 2px 8px; border-radius: 20px; background: #e5e7eb; color: #64748b; font-size: 12px; }
+
+ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+li { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; background: #f9fafb; }
+li strong { color: #2563eb; }
+
+.delete { width: 28px; height: 28px; padding: 0; background: #fee2e2; color: #b91c1c; }
+.delete:hover { background: #fecaca; }
+
+.empty { margin: 0; padding: 18px; border: 1px dashed #d1d5db; border-radius: 10px; color: #64748b; text-align: center; }
+
+@media (max-width: 480px) { .card { padding: 20px; } }
