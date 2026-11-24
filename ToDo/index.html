@@ -1,19 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="box">
-    <h2>My To-Do List</h2>
+<main class="box">
+    <h1>My To-Do List</h1>
 
-    <input id="task" placeholder="Enter a task">
-    <button onclick="addTask()">Add</button>
+    <form id="form">
+        <input id="task" placeholder="Enter a task" autocomplete="off" aria-label="New task">
+        <button type="submit">Add</button>
+    </form>
 
+    <p class="hint">Click a task to mark it done</p>
     <ul id="list"></ul>
-</div>
+</main>
 
 <script src="script.js"></script>
 </body>

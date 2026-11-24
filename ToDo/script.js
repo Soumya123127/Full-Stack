@@ -1,15 +1,27 @@
-function addTask() {
-    let task = document.getElementById("task").value;
+const input = document.getElementById("task");
+const list = document.getElementById("list");
 
-    if (task == "") return;
+document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
 
-    let li = document.createElement("li");
-    li.innerHTML = task + ' <button onclick="this.parentElement.remove()">X</button>';
+    const text = input.value.trim();
+    if (!text) return;
 
-    li.onclick = function() {
-        this.classList.toggle("done");
-    };
+    const li = document.createElement("li");
 
-    document.getElementById("list").appendChild(li);
-    document.getElementById("task").value = "";
-}
+    const span = document.createElement("span");
+    span.textContent = text;
+    span.onclick = () => li.classList.toggle("done");
+
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "×";
+    del.setAttribute("aria-label", "Delete task");
+    del.onclick = () => li.remove();
+
+    li.append(span, del);
+    list.appendChild(li);
+
+    input.value = "";
+    input.focus();
+});
