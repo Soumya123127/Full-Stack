@@ -1,0 +1,66 @@
+body {
+    font-family: Arial;
+    background: #eaf2f8;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.form {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #ccc;
+}
+
+h2 {
+    text-align: center;
+    color: #2563eb;
+}
+
+p {
+    text-align: center;
+    color: gray;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.gender {
+    margin-top: 10px;
+}
+
+.gender input {
+    width: auto;
+}
+
+textarea {
+    height: 70px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
