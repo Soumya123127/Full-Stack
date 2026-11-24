@@ -1,0 +1,32 @@
+body {
+    font-family: Arial;
+    background: #eaf2f8;
+    text-align: center;
+    padding: 30px;
+}
+
+.box {
+    background: white;
+    padding: 25px;
+    width: 300px;
+    margin: auto;
+    border-radius: 10px;
+}
+
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#result {
+    line-height: 1.8;
+}
