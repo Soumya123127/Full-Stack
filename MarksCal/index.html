@@ -1,22 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marks Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<main class="card">
+    <header class="head">
+        <span class="logo">%</span>
+        <div><h1>Marks Calculator</h1><p>Average, grade & result — instantly</p></div>
+    </header>
 
-<div class="box">
-    <h2>Marks Calculator</h2>
+    <div class="tabs" id="tabs"></div>
 
-    <input id="m1" placeholder="Subject 1" type="number">
-    <input id="m2" placeholder="Subject 2" type="number">
-    <input id="m3" placeholder="Subject 3" type="number">
+    <form id="form" novalidate>
+        <div class="fields" id="fields"></div>
+        <div class="actions">
+            <button type="submit">Calculate</button>
+            <button type="reset" class="ghost">Reset</button>
+        </div>
+    </form>
 
-    <button onclick="calculate()">Calculate</button>
-    <p id="result"></p>
-</div>
+    <p id="error" class="error" hidden></p>
 
+    <section id="result" class="result" hidden>
+        <div class="hero">
+            <div><small>Percentage</small><strong id="percent"></strong></div>
+            <span id="grade" class="pill"></span>
+        </div>
+        <div class="bar"><i id="bar"></i></div>
+        <div class="rows">
+            <div><span>Total</span><b id="total"></b></div>
+            <div><span>Result</span><b id="status"></b></div>
+        </div>
+    </section>
+</main>
 <script src="script.js"></script>
 </body>
 </html>
