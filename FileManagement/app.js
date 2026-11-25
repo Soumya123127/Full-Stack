@@ -1,11 +1,47 @@
-const fs = require("fs");
+const fs = require('fs');
+fs.writeFile('student.txt', 'Name: Rahul\nDepartment: Computer Engineering', (err) => {
+    if (err) {
+        console.log('Error writing file:', err);
+        return;
+    }
 
-fs.writeFileSync("sample.txt", "Hello! This is a sample file.");
+    console.log('File created successfully!');
 
-console.log("File created!");
+    fs.readFile('student.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.log('Error reading file:', err);
+            return;
+        }
 
-console.log("File Content:", fs.readFileSync("sample.txt", "utf8"));
+        console.log('\nFile Content:');
+        console.log(data);
 
-fs.unlinkSync("sample.txt");
+        fs.appendFile('student.txt', '\nName: Priya\nDepartment: IT', (err) => {
+            if (err) {
+                console.log('Error appending file:', err);
+                return;
+            }
 
-console.log("File deleted!");
+            console.log('\nData appended successfully!');
+
+            fs.readFile('student.txt', 'utf8', (err, updatedData) => {
+                if (err) {
+                    console.log('Error reading updated file:', err);
+                    return;
+                }
+
+                console.log('\nUpdated File Content:');
+                console.log(updatedData);
+
+                fs.unlink('student.txt', (err) => {
+                    if (err) {
+                        console.log('Error deleting file:', err);
+                        return;
+                    }
+
+                    console.log('\nFile deleted successfully!');
+                });
+            });
+        });
+    });
+});
