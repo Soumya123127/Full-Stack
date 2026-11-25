@@ -1,48 +1,237 @@
+const express = require('express');
 
-const express = require("express");
 const app = express();
+const PORT = 3000;
 
-const books = [
-  { name: "Wings of Fire", price: 200 },
-  { name: "The Alchemist", price: 250 },
-  { name: "Atomic Habits", price: 300 }
+app.use(express.json());
+
+let books = [
+    { id: 1, title: "Wings of Fire", author: "A.P.J. Abdul Kalam", price: 250, stock: 10 },
+    { id: 2, title: "The Alchemist", author: "Paulo Coelho", price: 300, stock: 8 },
+    { id: 3, title: "Atomic Habits", author: "James Clear", price: 400, stock: 5 }
 ];
+
 let cart = [];
 
-const css = `<style>
-*{box-sizing:border-box}body{margin:0;font:16px system-ui,sans-serif;background:#f6f3ee;color:#222}
-main{max-width:760px;margin:48px auto;padding:0 16px}h1{margin:0 0 24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.card,.cart{background:#fff;padding:18px;border-radius:12px;box-shadow:0 2px 10px #0001}
-.card b{display:block;margin-bottom:4px}.card span{color:#666}
-.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
-.total{text-align:right;margin:16px 0 0}a{color:#b45309}
-.btn{display:inline-block;margin-top:14px;padding:8px 14px;background:#b45309;color:#fff;border-radius:8px;text-decoration:none;font-size:14px}
-.btn:hover{background:#92400e}main>a{display:inline-block;margin-top:20px}
-</style>`;
-const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>${css}</head><body><main><h1>${title}</h1>${body}</main></body></html>`;
+let orders = [];
 
-app.get("/", (req, res) => res.send(page("Online Book Store", `
-  <div class="grid">${books.map((b, i) => `
-    <div class="card"><b>${b.name}</b><span>₹${b.price}</span>
-      <a class="btn" href="/add/${i}">Add to cart</a></div>`).join("")}</div>
-  <a href="/cart">View cart (${cart.length})</a>
-`)));
-
-app.get("/add/:id", (req, res) => {
-  const book = books[req.params.id];
-  if (book) cart.push(book);
-  res.redirect("/");
+app.get('/', (req, res) => {
+    res.send('Welcome to Online Book Store!');
 });
 
-app.get("/cart", (req, res) => res.send(page("Shopping Cart", `
-  <div class="cart">
-    ${cart.length ? cart.map(b => `<div class="row"><span>${b.name}</span><span>₹${b.price}</span></div>`).join("") : "<p>Your cart is empty.</p>"}
-    ${cart.length ? `<p class="total"><b>Total: ₹${cart.reduce((sum, b) => sum + b.price, 0)}</b></p>` : ""}
-  </div>
-  <a href="/">Back to store</a>${cart.length ? ' · <a href="/clear">Clear cart</a>' : ""}
-`)));
+app.get('/books', (req, res) => {
+    res.json(books);
+});
 
-app.get("/clear", (req, res) => { cart = []; res.redirect("/cart"); });
+app.get('/books/:id', (req, res) => {
 
-app.listen(3000, () => console.log("http://localhost:3000"));
+    const id = Number(req.params.id);
+
+    const book = books.find(b => b.id === id);
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    res.json(book);
+});
+
+app.post('/books', (req, res) => {
+
+    const { title, author, price, stock } = req.body;
+
+    if (!title || !author ||
+        typeof price !== 'number' || price <= 0 ||
+        !Number.isInteger(stock) || stock < 0) {
+
+        return res.status(400).json({
+            message: 'Please provide valid book details'
+        });
+    }
+
+    const newBook = {
+        id: books.length > 0
+            ? Math.max(...books.map(b => b.id)) + 1
+            : 1,
+        title,
+        author,
+        price,
+        stock
+    };
+
+    books.push(newBook);
+
+    res.status(201).json({
+        message: 'Book added successfully',
+        book: newBook
+    });
+});
+
+app.put('/books/:id', (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const book = books.find(b => b.id === id);
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    const { title, author, price, stock } = req.body;
+
+    if (!title || !author ||
+        typeof price !== 'number' || price <= 0 ||
+        !Number.isInteger(stock) || stock < 0) {
+
+        return res.status(400).json({
+            message: 'Please provide valid book details'
+        });
+    }
+
+    book.title = title;
+    book.author = author;
+    book.price = price;
+    book.stock = stock;
+
+    res.json({
+        message: 'Book updated successfully',
+        book: book
+    });
+});
+
+app.delete('/books/:id', (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const book = books.find(b => b.id === id);
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    books = books.filter(b => b.id !== id);
+
+    res.json({
+        message: 'Book deleted successfully'
+    });
+});
+
+app.get('/cart', (req, res) => {
+
+    res.json(cart);
+
+});
+
+app.post('/cart', (req, res) => {
+
+    const { bookId, quantity } = req.body;
+
+    const book = books.find(b => b.id === Number(bookId));
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+        return res.status(400).json({
+            message: 'Invalid quantity'
+        });
+    }
+
+    const existingItem = cart.find(
+        item => item.bookId === book.id
+    );
+
+    const alreadyInCart = existingItem
+        ? existingItem.quantity
+        : 0;
+
+    if (alreadyInCart + quantity > book.stock) {
+        return res.status(400).json({
+            message: 'Insufficient stock'
+        });
+    }
+
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            bookId: book.id,
+            title: book.title,
+            price: book.price,
+            quantity: quantity
+        });
+    }
+
+    res.status(201).json({
+        message: 'Book added to cart successfully',
+        cart: cart
+    });
+});
+
+app.post('/orders', (req, res) => {
+
+    if (cart.length === 0) {
+        return res.status(400).json({
+            message: 'Cart is empty'
+        });
+    }
+
+    for (const item of cart) {
+
+        const book = books.find(b => b.id === item.bookId);
+
+        if (!book || book.stock < item.quantity) {
+            return res.status(400).json({
+                message: 'Insufficient stock for ' + item.title
+            });
+        }
+    }
+
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
+
+    cart.forEach(item => {
+        const book = books.find(b => b.id === item.bookId);
+        book.stock -= item.quantity;
+    });
+
+    const newOrder = {
+        id: orders.length > 0
+            ? Math.max(...orders.map(o => o.id)) + 1
+            : 1,
+        items: cart.map(item => ({ ...item })),
+        total: total,
+        status: 'Confirmed'
+    };
+
+    orders.push(newOrder);
+
+    cart = [];
+
+    res.status(201).json({
+        message: 'Order placed successfully',
+        order: newOrder
+    });
+});
+
+app.get('/orders', (req, res) => {
+
+    res.json(orders);
+
+});
+
+app.listen(PORT, () => {
+    console.log(`Book Store Server running at http://localhost:${PORT}`);
+});
